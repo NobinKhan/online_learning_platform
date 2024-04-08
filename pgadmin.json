@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "OLP Database",
+            "Group": "OLP_Server",
+            "Host": "olp_database",
+            "Port": 5432,
+            "MaintenanceDB": "olp_db",
+            "Username": "nobinkhan",
+            "PassFile": "/pgadmin4/pgpassfile"
+        }
+    }
+}

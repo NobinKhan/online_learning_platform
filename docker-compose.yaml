@@ -1,0 +1,45 @@
+services:
+  olp_database:
+    container_name: olp_database
+    image: postgres:16.2-alpine3.19
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - olp_network
+    ports:
+      - 5432:5432
+
+  olp_pgadmin:
+    container_name: olp_pgadmin
+    image: dpage/pgadmin4:8.5
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - 5050:80
+    depends_on:
+      - olp_database
+    volumes:
+      - ./pgadmin.json:/pgadmin4/servers.json
+    networks:
+      - olp_network
+
+  # olp_interview:
+  #   container_name: olp_interview
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 8000:8000
+  #   depends_on:
+  #     - olp_pgadmin
+  #     - olp_database
+  #   networks:
+  #     - olp_network
+
+
+networks:
+  olp_network:
+    driver: bridge
