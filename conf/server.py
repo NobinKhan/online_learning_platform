@@ -1,30 +1,29 @@
 import time
 import random
 import string
-from os import environ
 
 from loguru import logger
-from dotenv import load_dotenv
 
 from fastapi import FastAPI, Request
-from edgy import Database, Registry
+from contextlib import asynccontextmanager
+from conf.database import init_db
 
 
-# env configuration
-load_dotenv(".env")
+# Async Database Configuration
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("server is starting")
+    await init_db()
+    yield
+    print("server is shutting down")
 
-# Database configuration
-database = Database(
-    url=f"{environ.get("DATABASE_SCHEME")}://{environ.get('POSTGRES_USER')}:{environ.get('POSTGRES_PASSWORD')}@{environ.get('POSTGRES_HOST')}:{environ.get('POSTGRES_PORT')}/{environ.get('POSTGRES_DB')}",
-)
-db_models = Registry(database=database)
 
 # main app
 app = FastAPI(
     title="Online Learning Platform",
     description="Online Learning Platform API",
-    on_startup=[database.connect],
-    on_shutdown=[database.disconnect],
+    version="0.1.0",
+    lifespan=lifespan,
 )
 
 

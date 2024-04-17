@@ -5,7 +5,9 @@ class Settings(BaseSettings):
     """
     This class defines the settings for the app
     """
+
     POSTGRES_URL: str
+    POSTGRES_ASYNC_URL: str
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
