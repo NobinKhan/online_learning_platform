@@ -2,18 +2,21 @@ import time
 import random
 import string
 
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, Request
+from sqladmin import Admin
+
 from loguru import logger
 
-from fastapi import FastAPI, Request
-from contextlib import asynccontextmanager
-from conf.database import init_db
+from conf.database import async_engine
+from app.admin.admin import UserAdmin
 
 
 # Async Database Configuration
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("server is starting")
-    await init_db()
+    # await init_db()
     yield
     print("server is shutting down")
 
@@ -25,7 +28,7 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
-
+admin = Admin(app, async_engine)
 
 # middleware
 @app.middleware("http")
@@ -44,7 +47,7 @@ async def log_requests(request: Request, call_next):
 
     return response
 
-
+admin.add_view(UserAdmin)
 # routers definition
 # app.include_router(auth.router)
 # app.include_router(user.router)
