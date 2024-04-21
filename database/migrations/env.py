@@ -8,6 +8,8 @@ from sqlmodel import SQLModel
 from alembic import context
 
 from app.user.model import User  # noqa: F401
+from app.course.model import Course  # noqa: F401
+
 from conf.settings import settings
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

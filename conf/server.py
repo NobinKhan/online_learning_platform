@@ -9,7 +9,7 @@ from sqladmin import Admin
 from loguru import logger
 
 from conf.database import async_engine
-from app.admin.admin import UserAdmin
+from app.admin.admin import UserAdmin, CourseAdmin
 
 
 # Async Database Configuration
@@ -48,6 +48,7 @@ async def log_requests(request: Request, call_next):
     return response
 
 admin.add_view(UserAdmin)
+admin.add_view(CourseAdmin)
 # routers definition
 # app.include_router(auth.router)
 # app.include_router(user.router)

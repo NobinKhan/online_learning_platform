@@ -1,8 +1,12 @@
+from typing import TYPE_CHECKING, List, Self
+from pydantic import model_validator
 from sqlalchemy import String
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 from app.base.model import BaseModelType
 
+if TYPE_CHECKING:
+    from app.course.model import Course
 
 class UserBase(SQLModel):
     name: str = Field(
@@ -20,7 +24,13 @@ class UserBase(SQLModel):
 
 # Properties to receive via API on creation
 class UserCreate(UserBase):
-    pass
+    @model_validator(mode='after')
+    def verify_user_type(self) -> Self:
+        if self.is_instructor and not self.is_student:
+            return self
+        elif self.is_student and not self.is_instructor:
+            return self
+        raise ValueError("user can only be student or instructor")
 
 
 # User DB fields
@@ -30,7 +40,7 @@ class UserDB(UserBase, BaseModelType):
 
 # Database model, database table inferred from class name
 class User(UserDB, table=True):
-    pass
+    courses: List["Course"] = Relationship(back_populates="instructor")
 
 
 # Properties to return via API, id is always required
