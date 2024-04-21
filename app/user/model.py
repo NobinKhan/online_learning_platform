@@ -33,14 +33,10 @@ class UserCreate(UserBase):
         raise ValueError("user can only be student or instructor")
 
 
-# User DB fields
-class UserDB(UserBase, BaseModelType):
-    is_admin: bool = Field(default=False)
-
 
 # Database model, database table inferred from class name
-class User(UserDB, table=True):
-    courses: List["Course"] = Relationship(back_populates="instructor")
+class User(UserBase, BaseModelType, table=True):
+    courses: List["Course"] = Relationship(back_populates="students")
 
 
 # Properties to return via API, id is always required

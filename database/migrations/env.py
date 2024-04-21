@@ -9,6 +9,7 @@ from alembic import context
 
 from app.user.model import User  # noqa: F401
 from app.course.model import Course  # noqa: F401
+from app.enroll.model import Enrollment  # noqa: F401
 
 from conf.settings import settings
 # this is the Alembic Config object, which provides
