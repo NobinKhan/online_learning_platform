@@ -26,6 +26,17 @@ services:
     networks:
       - olp_network
 
+  olp_redis:
+    container_name: olp_redis
+    image: redis:7.2.4-alpine3.19
+    depends_on:
+      - olp_database
+    ports:
+      - 6379:6379
+    networks:
+      - olp_network
+
+
   # olp_interview:
   #   container_name: olp_interview
   #   build:
