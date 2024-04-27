@@ -1,15 +1,13 @@
 from decimal import Decimal
 from django.db.models import (
-    Q,
     CharField,
     TextField,
     ForeignKey,
     DecimalField,
     DurationField,
     SET_NULL,
-    CheckConstraint,
 )
-
+import pgtrigger
 from base.models import BaseModel
 from user.models import User
 
@@ -29,11 +27,11 @@ class Course(BaseModel):
         db_table = "course"
         verbose_name = "Course"
         verbose_name_plural = "Courses"
-        constraints = [
-            CheckConstraint(
-                check=(
-                    Q(instructor__is_instructor=True)
-                )
+        triggers = [
+            pgtrigger.Protect(
+                name="is_instructor",
+                condition=pgtrigger.Q(instructor__is_instructor=True),
+                operation=[pgtrigger.Update, pgtrigger.Insert],
             )
         ]
 

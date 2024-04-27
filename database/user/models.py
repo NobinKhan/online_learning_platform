@@ -17,7 +17,8 @@ class User(BaseModel):
             CheckConstraint(
                 check=(
                     Q(is_instructor=True, is_student=False) | Q(is_instructor=False, is_student=True)
-                )
+                ),
+                name="is_instructor_or_is_student",
             )
         ]
 

@@ -1,4 +1,5 @@
 from django.db.models import Q, ForeignKey, CASCADE, UniqueConstraint
+import pgtrigger
 
 from base.models import BaseModel
 from course.models import Course
@@ -17,11 +18,11 @@ class Enrollment(BaseModel):
         db_table = "enrollment"
         verbose_name = "Course Enrollment"
         verbose_name_plural = "Course Enrollments"
-        constraints = [
-            UniqueConstraint(
-                fields=["student", "course"],
-                condition=Q(student__is_student=True),
+        triggers = [
+            pgtrigger.Protect(
                 name="unique_enrollment",
+                condition=pgtrigger.Q(student__is_student=True),
+                operation=[pgtrigger.Update, pgtrigger.Insert],
             )
         ]
 

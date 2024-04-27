@@ -35,6 +35,20 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-pgtrigger"
+version = "4.11.1"
+description = "Postgres trigger support integrated with Django models."
+optional = false
+python-versions = "<4,>=3.8.0"
+files = [
+    {file = "django_pgtrigger-4.11.1-py3-none-any.whl", hash = "sha256:9ef664932b3b7fb06e6dc091e4e292d029c221804469ff42968dad272076915f"},
+    {file = "django_pgtrigger-4.11.1.tar.gz", hash = "sha256:39862f229405c6fe49b33451e13910a70578ba569f7e8bea6ea82049058b371f"},
+]
+
+[package.dependencies]
+django = ">=3"
+
+[[package]]
 name = "psycopg"
 version = "3.1.18"
 description = "PostgreSQL database adapter for Python"
@@ -126,4 +140,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "889c94f579e8b928702fcb9c5f1450083017bcb1de49843b144f21b8a328b008"
+content-hash = "8f5d5f5b910aab49827f82eb9679c3c81b6763c2ae9f9a29a59a75ab84ac21f1"

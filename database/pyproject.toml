@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["nobinkhan <nazrulkhan.dk@gmail.com>"]
 license = "MIT"
-readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -12,6 +12,7 @@ django = "^5.0.4"
 python-dotenv = "^1.0.1"
 psycopg = "^3.1.18"
 redis = "^5.0.4"
+django-pgtrigger = "^4.11.1"
 
 
 [build-system]
