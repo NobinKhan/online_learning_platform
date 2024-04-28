@@ -2,21 +2,8 @@
 
 import django.db.models.deletion
 from decimal import Decimal
-from django.db import migrations, models, connection
+from django.db import migrations, models
 
-
-course_insert_trigger = "course/sql/insert_trigger.sql"
-drop_trigger = "DROP FUNCTION IF EXISTS course_before_insert_update_trigger"
-
-
-def create_trigger(apps, schema_editor):
-    with connection.cursor() as cursor:
-        cursor.execute(open(course_insert_trigger).read())
-
-
-def remove_trigger(apps, schema_editor):
-    with connection.cursor() as cursor:
-        cursor.execute(drop_trigger)
 
 
 class Migration(migrations.Migration):
@@ -75,5 +62,4 @@ class Migration(migrations.Migration):
                 "db_table": "course",
             },
         ),
-        migrations.RunPython(create_trigger, remove_trigger),
     ]

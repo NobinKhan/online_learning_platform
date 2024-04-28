@@ -1,5 +1,4 @@
 from django.db.models import ForeignKey, CASCADE
-import pgtrigger
 
 from base.models import BaseModel
 from course.models import Course
@@ -14,28 +13,6 @@ class Enrollment(BaseModel):
         db_table = "enrollment"
         verbose_name = "Course Enrollment"
         verbose_name_plural = "Course Enrollments"
-        # triggers = [
-        #     pgtrigger.Protect(
-        #         name="unique_enrollment",
-        #         condition=pgtrigger.Condition(
-        #             """
-        #             BEGIN
-        #                 SELECT is_student
-        #                 FROM student
-        #                 WHERE id = NEW.student_id
-        #                 AND is_student = TRUE;
-
-        #                 IF NOT FOUND THEN
-        #                     RAISE EXCEPTION 'enrollment already exists';
-        #                 END IF;
-
-        #                 RETURN NEW;
-        #             END;
-        #             """
-        #         ),
-        #         operation=[pgtrigger.Update, pgtrigger.Insert],
-        #     )
-        # ]
 
     def __str__(self):
-        return self.user
+        return f"{self.student.full_name}:- {self.course}"
