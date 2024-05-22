@@ -4,21 +4,31 @@ import string
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
-from sqladmin import Admin
+from fastapi_pagination import add_pagination
 
 from loguru import logger
 
-from conf.database import async_engine
-from app.admin.admin import UserAdmin, CourseAdmin, EnrollmentAdmin
+from conf.database import Postgresql
+from api.course import course
 
 
 # Async Database Configuration
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("server is starting")
-    # await init_db()
-    yield
-    print("server is shutting down")
+    try:
+        db_conn = await Postgresql().db_conn()
+
+        app.state = {"db_conn": db_conn}
+        logger.info("Server is starting")
+
+        yield
+    except Exception as e:
+        logger.error(f"An error occurred: {e}")
+        raise
+    finally:
+        if db_conn is not None:
+            await app.state.get("db_conn").close()
+        logger.info("Server is shutting down")
 
 
 # main app
@@ -27,8 +37,10 @@ app = FastAPI(
     description="Online Learning Platform API",
     version="0.1.0",
     lifespan=lifespan,
+    redoc_url=None,
 )
-admin = Admin(app, async_engine)
+add_pagination(app)
+
 
 # middleware
 @app.middleware("http")
@@ -47,11 +59,9 @@ async def log_requests(request: Request, call_next):
 
     return response
 
-admin.add_view(UserAdmin)
-admin.add_view(CourseAdmin)
-admin.add_view(EnrollmentAdmin)
+
 # routers definition
-# app.include_router(auth.router)
+app.include_router(course.router)
 # app.include_router(user.router)
 # app.include_router(movie.router)
 

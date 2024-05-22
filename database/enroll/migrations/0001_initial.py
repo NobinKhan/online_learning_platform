@@ -3,6 +3,7 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
+from sql.read import read_sql_file
 
 class Migration(migrations.Migration):
 
@@ -29,4 +30,7 @@ class Migration(migrations.Migration):
                 'db_table': 'enrollment',
             },
         ),
+        migrations.RunSQL(
+            sql=read_sql_file("enroll_before_insert_update_trigger.sql"),
+        )
     ]

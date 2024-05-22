@@ -4,6 +4,7 @@ import django.db.models.deletion
 from decimal import Decimal
 from django.db import migrations, models
 
+from sql.read import read_sql_file
 
 
 class Migration(migrations.Migration):
@@ -61,5 +62,8 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "Courses",
                 "db_table": "course",
             },
+        ),
+        migrations.RunSQL(
+            sql=read_sql_file("course_before_insert_update_trigger.sql"),
         ),
     ]
